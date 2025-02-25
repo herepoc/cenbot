@@ -8,6 +8,14 @@ interface Message {
   timestamp: number;
 }
 
+export const defaultQuestions = [
+  'Qual a diferença entre Centrum Homem e Centrum Mulher?',
+  'Centrum é bom para imunidade?',
+  'Posso tomar Centrum todos os dias?',
+  'Qual Centrum é ideal para idosos?',
+  'Centrum engorda?',
+] as const
+
 export const useChatStore = defineStore('chat', {
   state: () => ({
     messages: [] as Message[],
@@ -121,5 +129,9 @@ export const useChatStore = defineStore('chat', {
     setOrigem(origem: string) {
       this.origem = origem;
     },
+  },
+
+  getters: {
+    hasMessages: (state) => state.messages.length > 0,
   },
 });
