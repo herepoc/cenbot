@@ -1,8 +1,8 @@
 <template>
   <div class="flex justify-end">
     <!-- Conteúdo da mensagem -->
-    <div class="max-w-[80%] p-4 rounded-lg bg-primary/10">
-      <p class="text-gray-800 whitespace-pre-wrap">{{ content }}</p>
+    <div class="max-w-[80%] p-4 rounded-lg bg-primary/10 backdrop-blur-md">
+      <p class="text-gray-800 whitespace-pre-wrap ">{{ content }}</p>
     </div>
   </div>
 </template>

@@ -1,5 +1,5 @@
 <template>
-  <div class="flex items-start gap-4 p-4 rounded-lg bg-gray-100">
+  <div class="flex items-start gap-4 p-4 rounded-lg bg-gray-100 backdrop-blur-md">
     <!-- Avatar -->
     <div class="w-8 h-8 rounded-full flex items-center justify-center bg-primary">
       <span class="text-white text-sm">C</span>
