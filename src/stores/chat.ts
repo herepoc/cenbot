@@ -1,5 +1,6 @@
-import { defineStore } from 'pinia';
+import { defineStore } from 'pinia'
 import axios from 'axios';
+import { config } from '@/config/env'
 
 interface Message {
   id: string;
@@ -39,10 +40,10 @@ export const useChatStore = defineStore('chat', {
       });
 
       try {
-        const response = await fetch('https://api.dify.ai/v1/chat-messages', {
+        const response = await fetch(`${config.dify.host}/chat-messages`, {
           method: 'POST',
           headers: {
-            'Authorization': 'Bearer app-MzApMTHzILxjoV2Wvubr1NNw',
+            'Authorization': `Bearer ${config.dify.apiKey}`,
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
@@ -109,10 +110,10 @@ export const useChatStore = defineStore('chat', {
     async getSuggestedMessages(messageId: string) {
       try {
         const response = await axios.get(
-          `https://api.dify.ai/v1/messages/${messageId}/suggested`,
+          `${config.dify.host}/messages/${messageId}/suggested`,
           {
             headers: {
-              Authorization: 'Bearer app-MzApMTHzILxjoV2Wvubr1NNw',
+              Authorization: `Bearer ${config.dify.apiKey}`,
             },
             params: {
               user: this.origem || 'anonymous',

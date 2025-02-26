@@ -9,7 +9,7 @@
           v-for="question in defaultQuestions"
           :key="question"
           @click="handleQuestionClick(question)"
-          class="min-h-[6rem] w-[calc(33.33%-1rem)] p-4 flex items-center justify-center text-center bg-primary/10 backdrop-blur-md hover:bg-primary/20 rounded-lg shadow-sm transition-colors"
+          class="min-h-[6rem] w-[calc(50%-0.5rem)] md:w-[calc(33.33%-1rem)] p-4 flex items-center justify-center text-center bg-primary/10 backdrop-blur-md hover:bg-primary/20 rounded-lg shadow-sm transition-colors"
         >
           {{ question }}
         </button>
