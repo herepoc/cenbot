@@ -1,8 +1,11 @@
 <template>
   <div class="flex flex-col items-center justify-center h-full gap-6 p-4 bg-white/30 backdrop-blur-sm">
     <h2 class="text-2xl font-semibold text-gray-700 text-center">
-      Como posso ajudar você hoje?
+      Olá, seja bem vindo!
     </h2>
+    <p class="text-center text-gray-600 max-w-2xl mb-2">
+      Já trago aqui algumas das perguntas mais frequentemente feitas. Mas sinta-se livre pra perguntar o que quiser sobre Centrum!
+    </p>
     <div class="w-full max-w-6xl px-4">
       <div class="flex flex-wrap justify-center gap-4">
         <button
