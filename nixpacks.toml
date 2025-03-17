@@ -1,0 +1,18 @@
+[phases.setup]
+nixpkgs = ["nodejs_20"]
+
+[phases.install]
+cmds = ["npm ci"]
+
+[phases.build]
+cmds = ["npm run build"]
+
+[start]
+cmd = "npx serve -s dist"
+
+[phases.setup.environment]
+NODE_ENV = "production"
+NPM_CONFIG_PRODUCTION = "true"
+
+[phases.build.environment]
+VITE_USER_NODE_ENV = "production"
