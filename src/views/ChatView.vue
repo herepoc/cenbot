@@ -1,5 +1,11 @@
 <template>
-  <div class="h-screen pt-20">
+  <div v-if="configStore.isLoading" class="h-screen w-screen flex flex-col items-center justify-center bg-white/30 backdrop-blur-md">
+    <div class="text-2xl font-semibold text-gray-700 mb-8">{{ config.app.title }}</div>
+    <div class="loading-rainbow w-48 h-2 rounded-full mb-4"></div>
+    <div class="text-gray-600">Carregando configurações...</div>
+  </div>
+  
+  <div v-else class="h-screen pt-20">
     <!-- Área de mensagens com fundo blur -->
     <div ref="chatContainer" class="h-[calc(100vh-80px-76px)] overflow-y-auto bg-white/30">
       <div class="max-w-5xl mx-auto h-full">
@@ -51,13 +57,18 @@
 <script setup lang="ts">
 import { ref, onMounted, nextTick, watch } from 'vue'
 import { useChatStore } from '@/stores/chat'
+import { useConfigStore } from '@/stores/config'
 import { storeToRefs } from 'pinia'
 import UserMessage from '@/components/UserMessage.vue'
 import AssistantMessage from '@/components/AssistantMessage.vue'
 import MessageInput from '@/components/MessageInput.vue'
 import DefaultQuestions from '@/components/DefaultQuestions.vue'
+import { config as envConfig } from '@/config/env'
 
+// Make config reactive
+const config = ref(envConfig)
 const chatStore = useChatStore()
+const configStore = useConfigStore()
 const { messages, isLoading, suggestedMessages: suggestions } = storeToRefs(chatStore)
 const { sendMessage } = chatStore
 
@@ -77,7 +88,10 @@ watch([messages, isLoading], async () => {
 }, { deep: true })
 
 // Inicialização do chat
-onMounted(() => {
+onMounted(async () => {
+  // Fetch app parameters from Dify
+  await configStore.fetchAppParameters(chatStore.origem || 'default')
+  
   if (chatContainer.value) {
     chatContainer.value.scrollTop = chatContainer.value.scrollHeight
   }
@@ -146,55 +160,73 @@ onMounted(() => {
     opacity: 1;
   }
   50% {
-    transform: scaleY(1.2);
+    transform: scaleY(0.7);
     opacity: 0.8;
+  }
+}
+
+@keyframes rainbow-bounce {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-5px);
+  }
+}
+
+@keyframes rainbow-color {
+  0%, 100% {
+    background-color: #ff0000;
+  }
+  14% {
+    background-color: #ff9900;
+  }
+  28% {
+    background-color: #ffff00;
+  }
+  42% {
+    background-color: #00ff00;
+  }
+  56% {
+    background-color: #0099ff;
+  }
+  70% {
+    background-color: #6633ff;
+  }
+  84% {
+    background-color: #ff33cc;
   }
 }
 
 @keyframes rainbow-move {
   0% {
-    background-position: 0% 50%;
+    background-position: 0% 0;
   }
   100% {
-    background-position: 200% 50%;
+    background-position: 200% 0;
   }
 }
 
-@keyframes rainbow-bounce {
-  0% {
-    transform: translateY(0);
-  }
-  100% {
-    transform: translateY(-10px);
-  }
-}
-
-@keyframes rainbow-color {
-  0% {
-    background-color: #ff0000; /* Vermelho */
-  }
-  16.6% {
-    background-color: #ff9900; /* Laranja */
-  }
-  33.3% {
-    background-color: #ffff00; /* Amarelo */
-  }
-  50% {
-    background-color: #00ff00; /* Verde */
-  }
-  66.6% {
-    background-color: #0099ff; /* Azul */
-  }
-  83.3% {
-    background-color: #6633ff; /* Índigo */
-  }
-  100% {
-    background-color: #ff33cc; /* Violeta */
-  }
-}
-
-#loading-points {
+.dot {
+  height: 8px;
+  width: 8px;
+  border-radius: 50%;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.loading-rainbow {
+  width: 100%;
+  height: 10px;
+  border-radius: 5px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+  background: linear-gradient(
+    90deg,
+    #ff0000, #ff9900, #ffff00, #00ff00, #0099ff, #6633ff, #ff33cc, #ff0000
+  );
+  background-size: 200% 100%;
+  animation: rainbow-move 2s linear infinite;
 }
 </style>

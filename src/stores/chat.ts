@@ -9,14 +9,6 @@ interface Message {
   timestamp: number;
 }
 
-export const defaultQuestions = [
-  'Qual a diferença entre Centrum Homem e Centrum Mulher?',
-  'Centrum é bom para imunidade?',
-  'Posso tomar Centrum todos os dias?',
-  'Qual Centrum é ideal para idosos?',
-  'Centrum engorda?',
-] as const
-
 export const useChatStore = defineStore('chat', {
   state: () => ({
     messages: [] as Message[],
@@ -27,6 +19,11 @@ export const useChatStore = defineStore('chat', {
   }),
 
   actions: {
+    getStoreNameFromQueryString() {
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get('loja');
+    },
+
     async sendMessage(message: string) {
       this.isLoading = true;
       const messageId = Date.now().toString();
@@ -40,19 +37,29 @@ export const useChatStore = defineStore('chat', {
       });
 
       try {
+        const storeName = this.getStoreNameFromQueryString();
+        const inputs: Record<string, any> = {};
+        
+        // Adiciona o nome da loja ao objeto inputs apenas se estiver presente
+        if (storeName) {
+          inputs.loja = storeName;
+        }
+
+        const requestBody = {
+          inputs,
+          query: message,
+          response_mode: 'streaming',
+          conversation_id: this.conversationId,
+          user: this.origem || 'anonymous',
+        };
+
         const response = await fetch(`${config.dify.host}/chat-messages`, {
           method: 'POST',
           headers: {
             'Authorization': `Bearer ${config.dify.apiKey}`,
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({
-            inputs: {},
-            query: message,
-            response_mode: 'streaming',
-            conversation_id: this.conversationId,
-            user: this.origem || 'anonymous',
-          }),
+          body: JSON.stringify(requestBody),
         });
 
         const reader = response.body?.getReader();
