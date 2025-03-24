@@ -83,6 +83,10 @@ const formattedContent = computed(() => formatMessage(props.content))
   @apply my-6 border-gray-200;
 }
 
+.prose img {
+  @apply max-w-[350px] my-2 rounded-lg;
+}
+
 /* Adiciona espaçamento entre grupos de elementos */
 .prose-spacing > * + *:not(li) {
   @apply mt-4;
