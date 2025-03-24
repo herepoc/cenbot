@@ -1,8 +1,5 @@
 <template>
   <div class="flex flex-col items-center justify-center h-full gap-6 p-4 bg-white/30 backdrop-blur-sm">
-    <h2 class="text-2xl font-semibold text-gray-700 text-center">
-      {{ config.app.title }}
-    </h2>
     <p class="text-center text-gray-600 max-w-2xl mb-2">
       {{ configStore.openingStatement }}
     </p>
@@ -24,7 +21,6 @@
 <script setup lang="ts">
 import { useChatStore } from '@/stores/chat'
 import { useConfigStore } from '@/stores/config'
-import { config } from '@/config/env'
 
 const chatStore = useChatStore()
 const configStore = useConfigStore()
